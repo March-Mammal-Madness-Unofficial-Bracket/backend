@@ -19,6 +19,10 @@ create table if not exists permissions (
     name text not null unique
 );
 
+create table if not exists bracket (
+    id integer primary key,
+    bracket text not null
+);
 
 -- # Join tables.
 

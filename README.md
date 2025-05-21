@@ -10,4 +10,8 @@ curl 'http://127.0.0.1:3000/login' -v -X POST --data-raw 'username=ferrrris&pass
 
 curl 'http://127.0.0.1:3000/signup' -v -X POST --data-raw 'username=ferrrris&password=hunter42&next=%2F'
 
-curl 'https://127.0.0.1:3000/'
+curl 'http://127.0.0.1:3000/bracket' -v
+
+curl 'http://127.0.0.1:3000/leaderboard' -v
+
+curl 'http://127.0.0.1:3000/new_bracket' -v -X POST --data-raw 'one=a&two=b&three=c'
