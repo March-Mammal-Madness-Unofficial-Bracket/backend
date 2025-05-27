@@ -1,4 +1,4 @@
-use axum::{http::StatusCode, response::IntoResponse, routing::post, routing::get, Router};
+use axum::{http::StatusCode, response::IntoResponse, routing::post, routing::get, Router, extract, Json};
 
 use crate::users::AuthSession;
 
@@ -12,18 +12,18 @@ mod get {
     use super::*;
 
     pub async fn restricted(auth_session: AuthSession) -> impl IntoResponse {
-        StatusCode::INTERNAL_SERVER_ERROR.into_response()
+        StatusCode::OK.into_response()
     }
 }
 
 mod post {
     use super::*;
 
-    pub async fn update_bracket() -> impl IntoResponse {
-
+    pub async fn update_bracket(auth_session: AuthSession, extract::Json(payload): extract::Json<crate::bracket::Bracket>) -> impl IntoResponse {
+        
     }
 
-    pub async fn new_bracket() -> impl IntoResponse {
+    pub async fn new_bracket(auth_session: AuthSession, extract::Json(payload): extract::Json<Vec<String>>) -> impl IntoResponse {
 
     }
 }

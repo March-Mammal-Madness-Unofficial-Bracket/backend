@@ -70,7 +70,7 @@ pub enum Error {
 
 impl Backend {
     pub async fn add_bracket(&self, bracket: String) -> Result<(), sqlx::Error> {
-
+        Ok(())
     }
 
     pub async fn add_user(&self, password: String, username: String) -> Result<(), sqlx::Error> {
