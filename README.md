@@ -8,7 +8,7 @@ It provides login functionality with cookies for session management, it will ser
 
 curl 'http://127.0.0.1:3000/login' -v -X POST --data-raw 'username=ferrrris&password=hunter42&next=%2F'
 
-curl 'http://127.0.0.1:3000/signup' -v -X POST --data-raw 'username=ferrrris&password=hunter42&next=%2F'
+curl 'http://127.0.0.1:3000/signup' -v -X POST --data-raw 'username=ferrrris&password=hunter42&grade=9&realname=ferris&next=%2F'
 
 curl 'http://127.0.0.1:3000/bracket' -v
 

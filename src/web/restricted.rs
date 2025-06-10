@@ -16,7 +16,7 @@ mod get {
 
     pub async fn admin_leaderboard(auth_session: AuthSession) -> impl IntoResponse {
         match auth_session.user {
-            Some(user) => {
+            Some(_user) => {
                 Json(auth_session.backend.get_leaderboard().await.unwrap()).into_response()
             }
             None => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
@@ -31,8 +31,8 @@ mod post {
         auth_session: AuthSession,
         extract::Json(payload): extract::Json<crate::bracket::Bracket>,
     ) -> impl IntoResponse {
-        auth_session.backend.admin_insert_bracket(payload).await;
-        auth_session.backend.gen_scores().await;
+        auth_session.backend.admin_insert_bracket(payload).await.unwrap();
+        auth_session.backend.gen_scores().await.unwrap();
     }
 
     pub async fn new_bracket(
@@ -40,7 +40,7 @@ mod post {
         extract::Json(payload): extract::Json<Vec<String>>,
     ) -> impl IntoResponse {
         let bracket = crate::bracket::Bracket::new(payload);
-        auth_session.backend.admin_insert_bracket(bracket).await;
-        auth_session.backend.clear_scores().await;
+        auth_session.backend.admin_insert_bracket(bracket).await.unwrap();
+        auth_session.backend.clear_scores().await.unwrap();
     }
 }

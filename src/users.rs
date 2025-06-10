@@ -66,13 +66,8 @@ pub struct Credentials {
     pub username: String,
     pub password: String,
     pub next: Option<String>,
-    pub signup: Option<Signup>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct Signup {
-    pub grade: i64,
-    pub realname: String,
+    pub grade: Option<i64>,
+    pub realname: Option<String>
 }
 
 #[derive(Debug, Clone)]
@@ -184,14 +179,14 @@ impl Backend {
         user: User,
     ) -> Result<(), sqlx::Error> {
         let bracket_string = serde_json::to_string(&bracket).unwrap();
-        let query = r#"
-                INSERT OR REPLACE INTO users (username, bracket)
-                VALUES ($1, $2)
-                "#;
 
-        sqlx::query(query)
-            .bind(user.username)
+        sqlx::query(r#"
+            UPDATE users
+            SET bracket =  ?
+            WHERE username = ?
+            "#)
             .bind(bracket_string)
+            .bind(user.username)
             .execute(&self.db)
             .await?;
 
@@ -205,8 +200,8 @@ impl Backend {
                 .fetch_optional(&self.db)
                 .await?;
 
-        let mut bracket: crate::bracket::Bracket =
-            serde_json::from_str(&row.map(|(bracket,)| bracket).unwrap()).unwrap();
+        let bracket: crate::bracket::Bracket =
+            serde_json::from_str(&row.map(|(bracket,)| bracket).unwrap()).unwrap_or(crate::bracket::Bracket::new(vec![]));
 
         Ok(bracket)
     }

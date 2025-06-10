@@ -1,7 +1,6 @@
 use axum::{
     extract, http::StatusCode, response::IntoResponse, routing::get, routing::post, Json, Router,
 };
-use serde::{Deserialize, Serialize};
 
 use crate::users::AuthSession;
 
@@ -13,7 +12,6 @@ pub fn router() -> Router<()> {
 }
 
 mod get {
-    use axum::response::Html;
 
     use super::*;
 
@@ -32,7 +30,7 @@ mod get {
             users.realname = None;
         }
         match auth_session.user {
-            Some(user) => Json(leaderboard).into_response(),
+            Some(_user) => Json(leaderboard).into_response(),
             None => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
         }
     }
@@ -44,12 +42,14 @@ mod post {
         auth_session: AuthSession,
         extract::Json(payload): extract::Json<crate::bracket::Bracket>,
     ) {
+        tracing::info!("changing user bracket");
         if let Some(user) = auth_session.user {
             auth_session
                 .backend
                 .add_bracket(payload, user)
                 .await
                 .unwrap();
+            tracing::info!("user bracket changed");
         }
     }
 }

@@ -1,20 +1,11 @@
 use axum::{
-    extract::Query,
     http::StatusCode,
-    response::{Html, IntoResponse, Redirect},
+    response::{IntoResponse, Redirect},
     routing::{get, post},
     Form, Router,
 };
-use serde::Deserialize;
 
 use crate::users::{AuthSession, Credentials};
-
-// This allows us to extract the "next" field from the query string. We use this
-// to redirect after log in.
-#[derive(Debug, Deserialize)]
-pub struct NextUrl {
-    next: Option<String>,
-}
 
 pub fn router() -> Router<()> {
     Router::new()
@@ -27,7 +18,7 @@ mod post {
     use super::*;
 
     pub async fn signup(
-        mut auth_session: AuthSession,
+        auth_session: AuthSession,
         Form(creds): Form<Credentials>,
     ) -> impl IntoResponse {
         tracing::info!("signup");
@@ -36,10 +27,10 @@ mod post {
             .add_user(
                 creds.clone().password,
                 creds.clone().username,
-                creds.clone().signup.unwrap().grade,
-                creds.clone().signup.unwrap().realname,
+                creds.clone().grade.unwrap(),
+                creds.clone().realname.unwrap(),
             )
-            .await;
+            .await.unwrap();
         tracing::info!("after add_user");
         Redirect::to("/login").into_response()
     }

@@ -26,7 +26,7 @@ create table if not exists permissions (
 
 create table if not exists admindata (
     bracket text not null
-)
+);
     
 
 -- # Join tables.
@@ -57,20 +57,24 @@ values ('{
     "Round 5": ["Example"],
     "Champion": null,
     "Wild Card": null
-}')
+}');
 
 -- Insert "ferris" user.
-insert into users (username, password)
+insert into users (username, password, grade, realname)
 values (
     'ferris',
-    '$argon2id$v=19$m=19456,t=2,p=1$VE0e3g7DalWHgDwou3nuRA$uC6TER156UQpk0lNQ5+jHM0l5poVjPA1he/Tyn9J4Zw'
+    '$argon2id$v=19$m=19456,t=2,p=1$VE0e3g7DalWHgDwou3nuRA$uC6TER156UQpk0lNQ5+jHM0l5poVjPA1he/Tyn9J4Zw',
+    0,
+    'ferris'
 );
 
 -- Insert "admin" user.
-insert into users (username, password)
+insert into users (username, password, grade, realname)
 values (
     'admin',
-    '$argon2id$v=19$m=19456,t=2,p=1$VE0e3g7DalWHgDwou3nuRA$uC6TER156UQpk0lNQ5+jHM0l5poVjPA1he/Tyn9J4Zw'
+    '$argon2id$v=19$m=19456,t=2,p=1$VE0e3g7DalWHgDwou3nuRA$uC6TER156UQpk0lNQ5+jHM0l5poVjPA1he/Tyn9J4Zw',
+    0,
+    'admin'
 );
 
 -- Insert "users" and "superusers" groups.
