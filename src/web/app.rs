@@ -18,7 +18,7 @@ pub struct App {
 impl App {
     pub async fn new() -> Result<Self, Box<dyn std::error::Error>> {
         //let db = SqlitePool::connect(":memory:").await?;
-        let db = SqlitePool::connect("sqlite:my_database.db").await?;
+        let db = SqlitePool::connect("sqlite:app/bracket.db").await?;
         sqlx::migrate!().run(&db).await?;
 
         Ok(Self { db })

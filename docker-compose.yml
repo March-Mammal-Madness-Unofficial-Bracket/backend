@@ -1,0 +1,25 @@
+services:
+  mmm-backend:
+    image: mmm-backend
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./database:/app
+    restart: unless-stopped
+    depends_on:
+      - cloudflared
+    networks:
+      bracket-network:
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CF_TOKEN}
+    restart: unless-stopped
+    networks:
+      bracket-network:
+
+networks:
+  bracket-network:
+    driver: "bridge"

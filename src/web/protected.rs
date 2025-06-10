@@ -1,16 +1,15 @@
-use axum::{Json, http::StatusCode, response::IntoResponse, routing::get, routing::post, Router};
-use serde::{Serialize, Deserialize};
+use axum::{
+    extract, http::StatusCode, response::IntoResponse, routing::get, routing::post, Json, Router,
+};
+use serde::{Deserialize, Serialize};
 
 use crate::users::AuthSession;
 
 pub fn router() -> Router<()> {
-    Router::new().route("/leaderboard", get(self::get::leaderboard)).route("/bracket", get(self::get::bracket)).route("/bracket", post(self::post::bracket))
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct BracketResponse {
-    score: i64,
-    bracket: String,
+    Router::new()
+        .route("/leaderboard", get(self::get::leaderboard))
+        .route("/bracket", get(self::get::bracket))
+        .route("/bracket", post(self::post::bracket))
 }
 
 mod get {
@@ -18,20 +17,39 @@ mod get {
 
     use super::*;
 
-    pub async fn bracket(auth_session: AuthSession) -> Json<BracketResponse>{
-        Json(BracketResponse { score: 1, bracket: "example".to_string()})
+    pub async fn bracket(auth_session: AuthSession) -> impl IntoResponse {
+        match auth_session.user {
+            Some(user) => {
+                Json(auth_session.backend.get_bracket(user).await.unwrap()).into_response()
+            }
+            None => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+        }
     }
 
-    pub async fn leaderboard(auth_session: AuthSession) -> Json<Vec<BracketResponse>>{
-        Json(vec![BracketResponse { score: 1, bracket: "example".to_string()}])
-
+    pub async fn leaderboard(auth_session: AuthSession) -> impl IntoResponse {
+        let mut leaderboard = auth_session.backend.get_leaderboard().await.unwrap();
+        for users in &mut leaderboard {
+            users.realname = None;
+        }
+        match auth_session.user {
+            Some(user) => Json(leaderboard).into_response(),
+            None => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+        }
     }
 }
 
 mod post {
     use super::*;
-    pub async fn bracket(auth_session: AuthSession) {
-
+    pub async fn bracket(
+        auth_session: AuthSession,
+        extract::Json(payload): extract::Json<crate::bracket::Bracket>,
+    ) {
+        if let Some(user) = auth_session.user {
+            auth_session
+                .backend
+                .add_bracket(payload, user)
+                .await
+                .unwrap();
+        }
     }
 }
-

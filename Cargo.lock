@@ -404,26 +404,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "example-permissions"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "axum",
- "axum-login",
- "http",
- "hyper",
- "password-auth",
- "serde",
- "sqlx",
- "thiserror",
- "time",
- "tokio",
- "tower",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -989,6 +969,27 @@ dependencies = [
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "mmm-backend"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "axum-login",
+ "http",
+ "hyper",
+ "password-auth",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "thiserror",
+ "time",
+ "tokio",
+ "tower",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

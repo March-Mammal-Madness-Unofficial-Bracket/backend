@@ -4,7 +4,11 @@
 create table if not exists users (
     id integer primary key autoincrement,
     username text not null unique,
-    password text not null
+    grade integer not null,
+    realname text not null,
+    password text not null,
+    bracket text,
+    score integer default 0
 );
 
 -- Create `groups` table.
@@ -19,10 +23,11 @@ create table if not exists permissions (
     name text not null unique
 );
 
-create table if not exists bracket (
-    id integer primary key,
+
+create table if not exists admindata (
     bracket text not null
-);
+)
+    
 
 -- # Join tables.
 
@@ -42,6 +47,17 @@ create table if not exists groups_permissions (
 
 
 -- # Fixture hydration.
+
+insert into admindata (bracket)
+values ('{
+    "Round 1": ["Example", "Example", "Example"],
+    "Round 2": ["Example", "Example"],
+    "Round 3": ["Example"],
+    "Round 4": ["Example"],
+    "Round 5": ["Example"],
+    "Champion": null,
+    "Wild Card": null
+}')
 
 -- Insert "ferris" user.
 insert into users (username, password)

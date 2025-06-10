@@ -1,2 +1,4 @@
-my_database.db
+bracket.db
 target
+.env
+database

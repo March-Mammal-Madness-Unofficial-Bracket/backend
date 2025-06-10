@@ -7,9 +7,9 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilte
 
 use crate::web::App;
 
+mod bracket;
 mod users;
 mod web;
-mod bracket;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
